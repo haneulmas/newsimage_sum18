@@ -1,90 +1,57 @@
-# Reporting references
+# Source ledger: Wednesday 18 November 2026
 
-These references support the five-story **Wednesday 18 November 2026** image.
-They distinguish that day's events and reports from earlier events and future
-scheduled milestones. The image includes only the subjects and figures supplied
-in the brief.
+Checked on 19 November 2026 against the image's 3 leads, 8 cards and 16 briefs.
+Dates below distinguish an event from a new report, release, proposal or forecast.
+All illustrations are original schematic pictograms; they do not reconstruct
+specific damage, casualties, vessel positions or real faces.
 
-## Middle East
+## Eleven main stories
 
-- [AP: Iran widens attacks to Kuwait and Bahrain](https://apnews.com/article/mideast-news-iran-bahrain-us-november-18-2026-b71b1d25f3cff987b4b125196ecb4c3a).
-  The [18 November AP report syndicated by The Washington Post](https://www.washingtonpost.com/world/2026/11/18/iran-us-kuwait-gulf-attacks-bahrain/5023d6f6-e333-11f1-a99e-b3e3805c6b8b_story.html)
-  supports the widening attacks, the preceding US strike on an Iranian missile
-  site, Kuwait's reported drone interceptions and Bahrain's two shelter alerts.
-- [Khaleej Times: Bahrain, Kuwait and the Strait of Hormuz](https://www.khaleejtimes.com/world/mena/why-is-iran-targeting-bahrain-and-kuwait-what-is-happening-in-the-strait-of-hormuz),
-  published **18 November 2026, 4:30 PM**, reports Wednesday's interceptions and
-  ADNOC Logistics and Services' Wednesday statement about one of its vessels.
+| Image story | Date and editorial qualification | Supporting sources |
+| --- | --- | --- |
+| Trump meets Xi and Putin, Shenzhen | 18 Nov: Xi greets Trump on the airport tarmac; Trump and Putin shake hands before the banquet. Putin met Xi earlier Wednesday. Trilateral talks are scheduled for 19 Nov, with no Wednesday outcome claimed. | [ABC live report, 18 Nov updates at 04:57 and 07:12 EST](https://abcnews.com/Politics/live-updates/trump-asia-trip-2026/?entryId=138243636&id=138187702); [AP, 18 Nov](https://apnews.com/article/3fc8110f4b4414bfb2c03596f61da862) |
+| Iran widens Gulf attacks | 18 Nov developments in Kuwait and Bahrain follow the 17 Nov US Qeshm strike. Kuwait's interception claim stays attributed; Bahrain issued two shelter alerts. | [AP, 18 Nov 09:34 UTC](https://apnews.com/article/b1f0b530cffe951e6fcc1e27b2e1af94); [Akashvani, 18 Nov 13:51 IST](https://newsonair.gov.in/bahrain-kuwait-report-iranian-attacks-us-strikes-iranian-missile-site-on-qeshm-island/) |
+| Voyager 1 reaches one light-day | NASA dates the geometric milestone 18 Nov, 10:16:07 UTC; approximately 25.9 billion km, 24-hour light/radio travel time each way. No restored telemetry or Wednesday confirmation is claimed. | [NASA milestone](https://science.nasa.gov/resource/voyager-one-light-day-downloads/); [NASA tracker](https://science.nasa.gov/mission/voyager/where-are-voyager-1-and-voyager-2-now/); [18 Nov engineering update](https://science.nasa.gov/blogs/voyager/2026/11/18/voyager-1-engineers-analyze-data-issue-ready-to-confirm-light-day/) |
+| Fed minutes signal more rate hikes | Minutes released 18 Nov at 14:00 EST concern the October meeting; no Wednesday rate change. Wednesday's market close: Dow down 561 points; S&P 500 fifth consecutive loss. | [Federal Reserve release](https://www.federalreserve.gov/newsevents/pressreleases/monetary20261118a.htm); [AP minutes account, 18 Nov](https://cmg-cmg-rd-20056-prod.cdn.arcpublishing.com/news/business/fed-minutes-higher/RNNPN7CXHY5PTGK7HVZMVNUFCE/); [AP market close, 18 Nov](https://apnews.com/article/dad5715bc91b4aba23a567a40e22b1fc) |
+| EU proposes EUR45bn Ukraine loan | Commission proposal dated 18 Nov: up to EUR45 billion for 2027, not US dollars or disbursed aid. Approval remains necessary; principal repaid only once Russian reparations are received. | [European Commission IP/26/2454, Brussels 18 Nov](https://ec.europa.eu/commission/presscorner/api/files/document/print/en/ip_26_2454/IP_26_2454_EN.pdf) |
+| 15 Russian refineries disrupted | Reuters report dated 18 Nov, 10:10 EST, cites industry sources. Fifteen of 35 refineries were disrupted or halted cumulatively in November; not fifteen attacks that Wednesday. | [Reuters wire syndication](https://new.streetinsider.com/Reuters/Exclusive-Drone%2Battacks%2Bnearly%2Bhalve%2BRussias%2BNovember%2Boil%2Brefining,%2Bsources%2Bsay/27368424.html) |
+| COP31 talks near deadline | Ongoing 18 Nov talks in Antalya; scheduled close 20 Nov. A 17 Nov advance report makes the second draft due 18 Nov. The image says due, not published, approved or adopted. | [TWN, 18 Nov proceedings](https://www.twn.my/title2/climate/info.service/2026/cc261111.htm); [Report.az, 17 Nov 20:39, Wednesday milestone](https://report.az/en/ecology/cop31-ministers-discuss-2030-climate-goals-in-antalya); [UNFCCC conference](https://unfccc.int/cop31) |
+| Prabowo arrives for APEC | Arrival occurred Wednesday 18 Nov. The CEO Summit's 17-18 Nov dates are contextual; no summit agreement is invented. | [ANTARA, 18 Nov 14:24 GMT+7](https://en.antaranews.com/news/443427/prabowo-arrives-in-shenzhen-to-attend-the-33rd-apec-summit); [official CEO Summit circular](https://www.apecceosummit2026.cn/sfs/cms/file/20261027/580aa30d532f4d17bd36c631b54f317f.pdf) |
+| Akvan intensifies off India | IMD observations/advisories dated 18 Nov place the cyclone offshore. A 20 Nov crossing is a forecast, not completed landfall. | [IMD advisory 15, 18 Nov 06:00 UTC observations](https://mausam.imd.gov.in/backend/assets/cyclone_pdf/Tropical_cylone_advisory_no__15_based_on_0600_UTC_of_18_11_2026.pdf); [IMD advisory 18, 18 Nov 15:00 UTC observations](https://mausam.imd.gov.in/backend/assets/cyclone_pdf/Tropical_cylone_advisory_no__18_based_on_1500_UTC_of_18_11_2026.pdf) |
+| Amnesty: RSF drones killed civilians | New Amnesty report, 18 Nov, documents earlier June-August attacks around El Obeid. It is not a Wednesday casualty toll; the card explicitly says new report and earlier deaths. | [Amnesty, 18 Nov](https://www.amnesty.nl/actueel/dodelijke-drone-aanvallen-rsf-sudan-mogelijk-oorlogsmisdrijven); [Anadolu, 18 Nov](https://www.aa.com.tr/en/middle-east/amnesty-calls-for-war-crimes-probe-into-deadly-rsf-drone-strikes-in-sudan/4129668) |
+| Anthropic IPO priced at $83 | Company announcement dated 18 Nov: US$83 a share. Trading is expected on 19 Nov, subject to the announcement's conditions; no Wednesday trading debut is shown. | [Anthropic, 18 Nov](https://www.anthropic.com/news/anthropic-prices-initial-public-offering) |
 
-The lead's attacks and shelter alerts are Wednesday developments. Kuwait's
-interception statement remains attributed. The ADNOC vessel attack occurred the
-previous evening, **17 November**, and was announced on **18 November**. The
-image does not relabel that attack as a Wednesday event. Its ship-and-strait
-motif identifies the story's maritime context without asserting a vessel's
-position, a fire or the identity of its attacker.
+## Sixteen “Also on 18 November” briefs
 
-## Asia–Pacific
+| Image brief | Date and qualification | Supporting source |
+| --- | --- | --- |
+| US Democrats nominate Jeffries for Speaker | 18 Nov Democratic nomination; not election by the full House. | [Official House Democratic release, 18 Nov](https://democraticleader.house.gov/media/press-releases/speaker-designate-jeffries-were-committed-delivering-change-american-people) |
+| Witnesses: tanks push into central Gaza | Wednesday 18 Nov advance reported by witnesses; attribution retained. | [Reuters, 18 Nov 08:01 EST](https://new.streetinsider.com/Reuters/Israeli%2Bmilitary%2Bbegins%2Ba%2Bnew%2Bthrust%2Bin%2BGaza%2C%2Bwitnesses%2Bsay/27367043.html); [AFP, 18 Nov 18:17](https://www.afp.com/de/node/3853622) |
+| Hegseth meets Venezuela's interim leader | Meeting in Caracas occurred 18 Nov; identifies the meeting only. | [Reuters video, 18 Nov 12:52 EST](https://www.marketscreener.com/news/venezuela-interim-president-and-us-defense-secretary-hegseth-meet-in-caracas-ce785edddd81f721) |
+| Brazil Senate approves fiscal package | Senate vote Wednesday 18 Nov; bill goes next to lower house, not enacted law. | [Reuters, 18 Nov 17:33 EST](https://new.streetinsider.com/Reuters/Brazil%2BSenate%2Bapproves%2Bfiscal%2Bpackage%2Bas%2Bgovernment%2Bseeks%2Bto%2Bcalm%2Bmarkets/27371337.html) |
+| UK reports October inflation at 3.6% | ONS release 18 Nov; annual CPI for October, up from September's 3.5%. Not CPIH, which is 3.7%. | [ONS release, 18 Nov](https://www.ons.gov.uk/economy/inflationandpriceindices/bulletins/consumerpriceinflation/october2026) |
+| IAEA reports Yongbyon enrichment expansion | Grossi's 18 Nov statement reports an exterior completed in late October. Does not claim construction or operation began Wednesday. | [IAEA statement distributed by Publicnow, 18 Nov](https://ebs.publicnow.com/view/9BF989CC8FBE7550548915BC87340ED997B2BF73); [Reuters, 18 Nov](https://malaysia.news.yahoo.com/iaea-says-north-korea-expanding-133840579.html) |
+| Myanmar to review ASEAN relationship | Parliamentary remarks Wednesday 18 Nov; a promised review, not completed withdrawal from ASEAN. | [AP, 18 Nov 10:10 UTC](https://apnews.com/article/97e863b842b3a3ad805635b11a7aea8c) |
+| Ethiopia-Eritrea border buildup reported | Reuters report 18 Nov cites monitors and sources; no unverified clashes or new war stated as fact. | [Reuters, 18 Nov 06:11 EST](https://www.streetinsider.com/Reuters/Ethiopia%2Band%2BEritrea%2Bamass%2Bforces%2Balong%2Bborder,%2Bheightening%2Bwar%2Bfears,%2Bsources%2Bsay/27366323.html) |
+| UNICEF reports child casualties in Yemen | Report dated 18 Nov; cumulative casualties since 3 Sep, not a one-day count. | [UNICEF, 18 Nov](https://www.unicef.org/yemen/press-releases/least-64-children-killed-and-64-injured-yemen-intensified-hostilities-approach-three) |
+| South Africa aid groups warn of HIV/TB care gaps | AP's 18 Nov report explicitly attributes Wednesday statements to aid groups. | [AP syndication, 18 Nov 09:27 EST](https://www.washingtonpost.com/world/2026/11/18/south-africa-immigration-tensions-health-risks/f8a2fc82-e359-11f1-a99e-b3e3805c6b8b_story.html) |
+| Vatican marks St Peter's 400th anniversary | Anniversary Mass occurred Wednesday 18 Nov. | [Vatican News, 18 Nov 17:55](https://www.vaticannews.va/en/pope/news/2026-11/pope-celebrates-mass-on-400th-anniversary-of-st-peter-s-basilica.html) |
+| Ecuador receives NY collapse victim's remains | One confirmed Wednesday return; another victim's arrival was still expected that night. Use singular “victim's,” not a confirmed plural return. | [AP, 18 Nov 16:08 UTC](https://apnews.com/article/7ca2d044f872610034cfc41ef23c7eb5) |
+| Trump meets Marcos in Manila | Meeting occurred earlier Wednesday 18 Nov before Trump's China arrival. No detailed trade agreement is asserted. | [ABC, 18 Nov live updates](https://abcnews.com/Politics/live-updates/trump-asia-trip-2026/?entryId=138243636&id=138187702) |
+| Indonesia unveils blue-carbon revenue rules | Wednesday 18 Nov unveiling at COP31; distinct from Tuesday's three-project launch. | [ANTARA, 18 Nov 18:17 GMT+7](https://en.antaranews.com/news/443535/indonesia-sets-rules-for-sharing-blue-carbon-revenues) |
+| Carney meets Trump at APEC | Official readout dated 18 Nov places the evening meeting in Shenzhen; no completed trade deal claimed. | [Canadian prime minister's readout, 18 Nov](https://www.pm.gc.ca/en/news/readouts/2026/11/18/prime-minister-carney-meets-president-united-states-donald-j-trump) |
+| ADNOC reports 17 Nov vessel attack | Statement dated 18 Nov describes the previous evening's attack; event date stays explicit. Company does not attribute an attacker. | [ADNOC official statement, page dated 18 Nov despite URL](https://adnocls.ae/en/news-and-media/press-releases/2026/november-17-statement) |
 
-- [ANTARA: Prabowo arrives in Shenzhen to attend the 33rd APEC Summit](https://en.antaranews.com/news/443427/prabowo-arrives-in-shenzhen-to-attend-the-33rd-apec-summit),
-  published **18 November 2026, 14:24 GMT+7**, identifies the **33rd** meeting in
-  Shenzhen and its **18–19 November 2026** dates.
-- The [Chinese Foreign Ministry's meeting announcement, carried by its embassy in Indonesia](https://id.china-embassy.gov.cn/eng/xwdt/202611/t20261113_12058556.htm),
-  published **13 November 2026**, identifies Xi Jinping as chair and corroborates
-  the meeting schedule.
+## Four date-check exclusions
 
-**18 November** is the first day of the leaders' two-day gathering. The earlier
-announcement corroborates its schedule; the image does not present that
-announcement as Wednesday's news or imply that an agreement had been concluded.
-The skyline motif identifies an urban summit setting rather than a photographed
-scene or a claim about a particular building.
+| Excluded from Wednesday's events | Date check and source |
+| --- | --- |
+| Nvidia's results | Released 17 Nov, not 18 Nov. Wednesday share-price movement is a separate event. [Nvidia release](https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Third-Quarter-Fiscal-2027/default.aspx); [SEC 17 Nov filing](https://www.sec.gov/Archives/edgar/data/1045810/000104581026000088/nvda-20261117.htm) |
+| Qeshm strike itself | US strike occurred Tuesday 17 Nov. Wednesday's Gulf attacks remain separate developments. [CBS reporting](https://www.cbsnews.com/live-updates/iran-war-us-nuclear-oil-strait-of-hormuz/?intcid=CNI-00-10aaa3a); [Iranwire, 18 Nov report identifying Tuesday's strike](https://iranwire.com/en/news/160397-us-military-official-strike-on-qeshm-was-a-response-to-irgc-actions/) |
+| Trilateral talks outcome | Talks scheduled Thursday 19 Nov; no result belongs to Wednesday. [ABC 18 Nov schedule](https://abcnews.com/Politics/live-updates/trump-asia-trip-2026/?entryId=138243636&id=138187702); [Reuters 18 Nov video wrap](https://www.marketscreener.com/news/wrap-xi-putin-blast-western-protectionism-and-sanctions-as-trump-lands-in-china-ce785edddd81f027) |
+| Akvan landfall | Forecast for Friday 20 Nov in 18 Nov advisories, not an observed Wednesday landfall. [IMD advisory 18](https://mausam.imd.gov.in/backend/assets/cyclone_pdf/Tropical_cylone_advisory_no__18_based_on_1500_UTC_of_18_11_2026.pdf) |
 
-## Markets
-
-[AP's 18 November Wall Street close report](https://apnews.com/article/dad5715bc91b4aba23a567a40e22b1fc),
-by Stan Choe, supports the fifth consecutive decline and Brent's **$91.95**
-settlement, down **1.3%**. The
-[Los Angeles Times syndication](https://www.latimes.com/business/story/2026-11-18/fifth-straight-drop-for-s-p-500-drags-wall-street-to-its-longest-losing-streak-since-june)
-is dated **18 November 2026, 1:23 PM PT**.
-
-The report describes the longest S&P 500 losing run since June and swinging AI
-stocks despite Nvidia's earnings beat. The image uses only the fifth-day
-headline and Brent figures to keep the story readable. It includes no Dow
-figure, S&P 500 closing percentage or individual-stock closing changes. The
-descending motif is schematic, not an invented price series. The minus sign is
-U+2212 (`−`), so Brent's daily change reads **−1.3%**.
-
-## Russia–Ukraine
-
-[Reuters: Drone attacks nearly halve Russia's November oil refining, sources say](https://www.reuters.com/business/energy/drone-attacks-nearly-halve-russias-november-oil-refining-sources-say-2026-11-18/),
-reported **18 November 2026**. The
-[Reuters wire copy syndicated by StreetInsider](https://new.streetinsider.com/Reuters/Exclusive-Drone%2Battacks%2Bnearly%2Bhalve%2BRussias%2BNovember%2Boil%2Brefining%2C%2Bsources%2Bsay/27368424.html)
-is dated **18 November 2026, 10:10 AM EST**.
-
-Industry sources told Reuters that drone attacks had disrupted or halted
-operations at **15 of Russia's 35 major refineries**. This is Wednesday reporting
-on **cumulative November disruption**, not a claim that 15 refineries were
-attacked on Wednesday. The image's support line, “Sources: 15/35 disrupted in
-Nov”, preserves that attribution and month. The refinery motif identifies the
-affected industry without asserting the appearance or condition of any named
-facility.
-
-## Climate
-
-- [Report.az: COP31 ministers discuss 2030 climate goals in Antalya](https://report.az/en/ecology/cop31-ministers-discuss-2030-climate-goals-in-antalya),
-  published **17 November 2026, 20:39**, reports that a second draft of the final
-  decision text was to be presented on **18 November**. The page does not name
-  its publication time zone.
-- The [official UNFCCC conference schedule](https://unfccc.int/cop31) identifies
-  Antalya as the venue and **20 November 2026** as the scheduled closing date.
-
-“18 Nov: second draft due” describes the announced milestone. It does not claim
-that the draft was published, agreed or adopted. The talks were still running
-on the edition date. The climate motif supplies subject recognition rather than
-claiming a measured environmental outcome.
-
-## Source scope
-
-The five stories are the Gulf lead, APEC, markets, Russian refining and COP31.
-All drawings are original schematic editorial motifs. They are not documentary
-photographs, maps with precise vessel positions or reconstructions of attacks.
-The short source footer is attribution; no essential headline or qualifier is
-relegated to it.
+No GTA VI sale-launch claim is included: it was not confirmed as 18 November
+news. The Ecuador fishermen's lawsuit is also omitted because it was filed and
+reported before Wednesday; the brief instead describes a confirmed Wednesday
+repatriation event.

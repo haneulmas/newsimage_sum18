@@ -15,7 +15,7 @@ import zlib
 ROOT = Path(__file__).resolve().parents[1]
 SIGNATURE = b"\x89PNG\r\n\x1a\n"
 MAX_BYTES = 1_048_576
-TARGET_BYTES = 200_000
+TARGET_BYTES = 400_000
 
 AUDITED_RUN = """
 import runpy
@@ -39,7 +39,7 @@ assert not any(name == "PIL" or name.startswith("PIL.") for name in sys.modules)
 
 def check_png(data):
     assert len(data) <= MAX_BYTES, "PNG exceeds 1 MiB"
-    assert len(data) < TARGET_BYTES, "PNG misses the under-200 KB target"
+    assert len(data) < TARGET_BYTES, "PNG misses the under-400 KB target"
     assert data[:8] == SIGNATURE, "Invalid PNG signature"
     chunks = []
     offset = 8

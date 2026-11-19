@@ -1,34 +1,76 @@
-"""Build the fixed edition offline; the contest entrypoint only copies its bytes."""
+"""Render a fixed news atlas offline; main.py copies the resulting PNG bytes."""
 
 from pathlib import Path
+import json
 import struct
 import zlib
 
 from PIL import Image, ImageDraw, ImageFont
+
+from pictograms import draw_pictogram
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SIZE = 1024
 SCALE = 2
 COLORS = {
-    "paper": "#F3EEE2", "ink": "#14202E", "grey": "#5B6470",
-    "rule": "#B9B2A2", "amber": "#A8741A", "red": "#A33A32",
-    "teal": "#2F6F6A",
+    "paper": "#F3EEE2", "ink": "#14202E", "grey": "#505660",
+    "rule": "#B8B1A4", "asia": "#63517C", "mideast": "#A1443F",
+    "europe": "#365C7E", "americas": "#466848", "space": "#20344B",
+    "markets": "#805719", "africa": "#7C583D", "climate": "#31685E",
 }
-FONTS = {
-    "headline": "LibreCaslonText-Bold.ttf",
-    "label": "Inter-Bold.ttf",
-    "body": "Inter-Regular.ttf",
-}
-BRIEFS = (
-    ("ASIA–PACIFIC", ("APEC leaders", "gather in", "Shenzhen"),
-     "Xi chairs, 18–19 Nov", "skyline", "amber"),
-    ("MARKETS", ("Wall Street falls", "for a fifth day"),
-     "Brent $91.95 (−1.3%)", "markets", "red"),
-    ("RUSSIA–UKRAINE", ("Drone strikes", "curb Russian", "refining"),
-     "Sources: 15/35 disrupted in Nov", "refinery", "red"),
-    ("CLIMATE", ("COP31 talks", "enter final days", "in Antalya"),
-     "18 Nov: second draft due", "globe", "teal"),
+FONTS = {"headline": "Inter-Bold.ttf", "label": "Nunito.ttf", "body": "Inter-Regular.ttf"}
+LEADS = (
+    ("asia", "ASIA / SHENZHEN / APEC", "diplomacy",
+     ("Trump meets", "Xi, Putin"),
+     ("Xi greets Trump on the tarmac.", "Trump and Putin shake hands.",
+      "Trilateral: scheduled 19 Nov.")),
+    ("mideast", "MIDDLE EAST / GULF", "gulf",
+     ("Iran widens", "Gulf attacks"),
+     ("Kuwait: drones intercepted.", "Bahrain: two shelter alerts.",
+      "After US strike on 17 Nov.")),
+    ("space", "SPACE / NASA", "voyager",
+     ("Voyager 1", "one light-day"),
+     ("First human-made object.", "25.9 billion km from Earth.",
+      "Radio: 24 hours each way.")),
+)
+CARDS = (
+    ("markets", "US / FED", "fed", ("Fed minutes", "signal more", "rate hikes"),
+     "Dow −561; S&P: fifth daily loss"),
+    ("europe", "EUROPE / UKRAINE", "loan", ("EU proposes", "€45bn loan", "for Ukraine"),
+     "For 2027; approval still needed"),
+    ("europe", "RUSSIA / ENERGY", "refinery", ("15 refineries", "disrupted by", "drone strikes"),
+     "15 of 35 in November: sources"),
+    ("climate", "TÜRKIYE / COP31", "climate", ("COP31 talks", "near their", "deadline"),
+     "Antalya; second draft due today"),
+    ("asia", "CHINA / APEC BUSINESS", "business", ("Prabowo", "arrives", "for APEC"),
+     "Shenzhen CEO Summit: 17–18 Nov"),
+    ("asia", "INDIA / BAY OF BENGAL", "cyclone", ("Akvan", "intensifies", "off India"),
+     "Landfall forecast for 20 Nov"),
+    ("africa", "SUDAN / NEW REPORT", "sudan", ("Amnesty:", "RSF drones", "killed civilians"),
+     "El Obeid: earlier civilian deaths"),
+    ("markets", "US / TECHNOLOGY", "ipo", ("Anthropic IPO", "priced at", "$83 a share"),
+     "Trading scheduled for 19 Nov"),
+)
+
+# Every brief has a dated reference in SOURCES.md; cumulative figures stay attributed.
+ALSO = (
+    ("americas", "US Democrats nominate Jeffries for Speaker"),
+    ("mideast", "Witnesses: tanks push into central Gaza"),
+    ("americas", "Hegseth meets Venezuela's interim leader"),
+    ("americas", "Brazil Senate approves fiscal package"),
+    ("europe", "UK reports October inflation at 3.6%"),
+    ("asia", "IAEA reports Yongbyon enrichment expansion"),
+    ("asia", "Myanmar to review ASEAN relationship"),
+    ("africa", "Ethiopia–Eritrea border buildup reported"),
+    ("mideast", "UNICEF reports child casualties in Yemen"),
+    ("africa", "S. Africa aid groups warn of HIV/TB care gaps"),
+    ("europe", "Vatican marks St Peter's 400th anniversary"),
+    ("americas", "Ecuador receives NY collapse victim's remains"),
+    ("asia", "Trump meets Marcos in Manila"),
+    ("climate", "Indonesia unveils blue-carbon revenue rules"),
+    ("americas", "Carney meets Trump at APEC"),
+    ("mideast", "ADNOC reports 17 Nov vessel attack"),
 )
 
 
@@ -37,14 +79,19 @@ class Page:
         self.image = Image.new("RGB", (SIZE * SCALE, SIZE * SCALE), COLORS["paper"])
         self.draw = ImageDraw.Draw(self.image)
         self.fonts = {}
+        self.text_bounds = []
+
+    def color(self, value):
+        return COLORS.get(value, value)
 
     def font(self, face, size):
         key = (face, size)
         if key not in self.fonts:
-            self.fonts[key] = ImageFont.truetype(
-                str(ROOT / "assets" / "fonts" / FONTS[face]), round(size * SCALE),
-                layout_engine=ImageFont.Layout.BASIC,
-            )
+            font = ImageFont.truetype(str(ROOT / "assets" / "fonts" / FONTS[face]),
+                                      round(size * SCALE), layout_engine=ImageFont.Layout.BASIC)
+            if face == "label":
+                font.set_variation_by_axes([750])
+            self.fonts[key] = font
         return self.fonts[key]
 
     def text(self, value, x, baseline, size, face="body", color="ink", width=None):
@@ -55,122 +102,132 @@ class Page:
             raise ValueError(f"Text outside canvas: {value}")
         if width is not None and bounds[2] > (x + width) * SCALE:
             raise ValueError(f"Text exceeds column: {value}")
-        self.draw.text(point, value, font=font, anchor="ls", fill=COLORS[color])
+        self.text_bounds.append((value, tuple(v / SCALE for v in bounds)))
+        self.draw.text(point, value, font=font, anchor="ls", fill=self.color(color))
 
     def rect(self, bounds, color):
-        self.draw.rectangle(tuple(round(v * SCALE) for v in bounds), fill=COLORS[color])
+        self.draw.rectangle(tuple(round(v * SCALE) for v in bounds), fill=self.color(color))
 
     def line(self, points, color="rule", width=1):
         self.draw.line([(round(x * SCALE), round(y * SCALE)) for x, y in points],
-                       fill=COLORS[color], width=max(1, round(width * SCALE)), joint="curve")
+                       fill=self.color(color), width=max(1, round(width * SCALE)), joint="curve")
 
     def polygon(self, points, color="ink"):
         self.draw.polygon([(round(x * SCALE), round(y * SCALE)) for x, y in points],
-                          fill=COLORS[color])
+                          fill=self.color(color))
 
     def ellipse(self, bounds, color, width=None):
         box = tuple(round(v * SCALE) for v in bounds)
         if width is None:
-            self.draw.ellipse(box, fill=COLORS[color])
+            self.draw.ellipse(box, fill=self.color(color))
         else:
-            self.draw.ellipse(box, outline=COLORS[color], width=round(width * SCALE))
+            self.draw.ellipse(box, outline=self.color(color), width=max(1, round(width * SCALE)))
+
+    def check_text_collisions(self):
+        for index, (text, a) in enumerate(self.text_bounds):
+            for other, b in self.text_bounds[index + 1:]:
+                if min(a[2], b[2]) - max(a[0], b[0]) > .5 and min(a[3], b[3]) - max(a[1], b[1]) > .5:
+                    raise ValueError(f"Text collision: {text!r} and {other!r}")
 
 
-def tanker(page, x, y):
-    # Maritime context, not a claim that a vessel burned on the edition date.
-    page.polygon([(x, y + 69), (x + 169, y + 69), (x + 147, y + 103), (x + 24, y + 103)])
-    page.rect((x + 11, y + 43, x + 133, y + 62), "ink")
-    page.rect((x + 112, y + 18, x + 144, y + 62), "ink")
-    page.rect((x + 117, y + 25, x + 137, y + 34), "paper")
-    page.line([(x + 130, y + 18), (x + 130, y + 4)], "ink", 3)
-    page.line([(x + 14, y + 116), (x + 155, y + 116)], "teal", 4)
-    page.line([(x + 35, y + 128), (x + 135, y + 128)], "teal", 3)
+def header(page):
+    page.rect((0, 0, SIZE, 187), "ink")
+    page.text("WEDNESDAY", 20, 80, 84, "headline", "paper", 984)
+    page.text("18 NOVEMBER 2026", 20, 170, 84, "headline", "paper", 984)
+    page.text("Everything here happened, or was first reported, on 18 Nov 2026",
+              20, 213, 25, width=984)
+    x = 20
+    for name, title in (("asia", "Asia"), ("mideast", "Middle East"), ("europe", "Europe"),
+                        ("americas", "Americas"), ("space", "Space"), ("markets", "Markets"),
+                        ("africa", "Africa"), ("climate", "Climate / health")):
+        page.rect((x, 225, x + 8, 233), name)
+        page.text(title, x + 13, 234, 13, "label")
+        x += {"asia": 72, "mideast": 118, "europe": 88, "americas": 106,
+              "space": 83, "markets": 96, "africa": 80, "climate": 145}[name]
 
 
-def motif(page, name, x, y, accent):
-    if name == "skyline":
-        page.rect((x + 1, y + 51, x + 22, y + 94), "ink")
-        page.rect((x + 61, y + 35, x + 83, y + 94), "ink")
-        page.polygon([(x + 31, y + 94), (x + 31, y + 29), (x + 44, y + 1),
-                      (x + 54, y + 29), (x + 54, y + 94)])
-        page.line([(x + 44, y + 15), (x + 44, y + 81)], accent, 3)
-        page.line([(x - 3, y + 97), (x + 88, y + 97)], "ink", 3)
-    elif name == "markets":
-        # A direction symbol, with no invented price points, dates or axis values.
-        page.line([(x + 3, y + 6), (x + 3, y + 93), (x + 86, y + 93)], "ink", 3)
-        page.line([(x + 14, y + 19), (x + 38, y + 43), (x + 54, y + 36),
-                   (x + 80, y + 73)], accent, 6)
-        page.line([(x + 61, y + 72), (x + 80, y + 73), (x + 80, y + 54)], accent, 6)
-    elif name == "refinery":
-        page.rect((x + 8, y + 21, x + 26, y + 91), "ink")
-        page.rect((x + 48, y + 3, x + 68, y + 91), "ink")
-        for offset in (19, 43, 67):
-            page.rect((x + 44, y + offset, x + 72, y + offset + 5), accent)
-        page.line([(x + 26, y + 51), (x + 37, y + 51), (x + 37, y + 77),
-                   (x + 48, y + 77)], "ink", 5)
-        page.line([(x, y + 95), (x + 85, y + 95)], "ink", 4)
-    elif name == "globe":
-        page.ellipse((x, y + 7, x + 88, y + 95), accent, 4)
-        page.ellipse((x + 22, y + 7, x + 66, y + 95), accent, 3)
-        page.line([(x + 3, y + 51), (x + 85, y + 51)], accent, 3)
-        page.line([(x + 10, y + 28), (x + 78, y + 28)], accent, 3)
-        page.line([(x + 10, y + 74), (x + 78, y + 74)], accent, 3)
-    else:
-        raise ValueError(f"Unknown story motif: {name}")
+def lead_panels(page):
+    for index, (region, tag, icon, headline, support) in enumerate(LEADS):
+        x = 20 + index * 332
+        page.rect((x, 250, x + 320, 536), region)
+        page.text(tag, x + 14, 273, 13.5, "label", "paper", 292)
+        page.rect((x + 14, 282, x + 306, 386), "paper")
+        draw_pictogram(page, icon, (x + 19, 283, x + 301, 384), region)
+        for row, line in enumerate(headline):
+            page.text(line, x + 14, 427 + row * 46, 44, "headline", "paper", 292)
+        for row, line in enumerate(support):
+            page.text(line, x + 14, 498 + row * 16.5, 15.5, color="paper", width=292)
+
+
+def story_cards(page):
+    for index, (region, tag, icon, headline, support) in enumerate(CARDS):
+        x = 20 + (index % 4) * 249
+        y = 552 + (index // 4) * 128
+        page.line([(x, y), (x + 237, y)], region, 4)
+        page.text(tag, x, y + 20, 12.5, "label", region, 237)
+        draw_pictogram(page, icon, (x, y + 39, x + 50, y + 89), region)
+        for row, line in enumerate(headline):
+            page.text(line, x + 62, y + 46 + row * 24, 22, "headline", width=175)
+        page.text(support, x, y + 111, 12.3, width=237)
+
+
+def where_map(page):
+    x, y, w, h = 775, 850, 229, 106
+    page.text("WHERE IT HAPPENED", x, 831, 16, "label", width=w)
+    # Equirectangular silhouettes are schematic, not administrative boundaries.
+    continents = (
+        [(-168, 66), (-130, 72), (-105, 67), (-81, 49), (-60, 48), (-81, 25),
+         (-86, 9), (-105, 22), (-125, 44), (-156, 58)],
+        [(-81, 12), (-51, 4), (-35, -8), (-51, -30), (-68, -55), (-78, -16)],
+        [(-12, 35), (12, 37), (33, 29), (48, 7), (32, -33), (14, -35), (-6, 2)],
+        [(-10, 36), (-8, 58), (27, 71), (69, 71), (111, 75), (170, 61),
+         (141, 36), (122, 23), (109, -5), (87, 9), (77, 27), (52, 12), (30, 30)],
+        [(113, -14), (138, -11), (153, -28), (140, -40), (115, -33)],
+        [(-54, 59), (-19, 64), (-26, 81), (-48, 81)],
+    )
+
+    def project(lon, lat):
+        return x + (lon + 180) / 360 * w, y + (82 - lat) / 140 * h
+
+    for polygon in continents:
+        page.polygon([project(lon, lat) for lon, lat in polygon], "#D5CFC2")
+    locations = ((114, 23, "asia"), (121, 15, "asia"), (85, 18, "asia"),
+                 (48, 29, "mideast"), (50, 26, "mideast"), (35, 39, "climate"),
+                 (31, 49, "europe"), (38, 56, "europe"), (30, 13, "africa"),
+                 (28, -26, "africa"), (12, 42, "europe"), (107, -6, "climate"),
+                 (-77, 39, "americas"), (-122, 38, "markets"), (-67, 10, "americas"),
+                 (-48, -16, "americas"), (-78, -1, "americas"))
+    for lon, lat, region in locations:
+        px, py = project(lon, lat)
+        page.ellipse((px - 2.4, py - 2.4, px + 2.4, py + 2.4), region)
+    page.text("Schematic locations; space off-map", x, 966, 11, width=w)
+
+
+def briefs(page):
+    page.line([(20, 806), (1004, 806)], "ink", 1.5)
+    page.text("ALSO ON 18 NOVEMBER", 20, 831, 18, "headline", width=735)
+    for index, (region, value) in enumerate(ALSO):
+        x = 20 if index < 8 else 397
+        baseline = 853 + (index % 8) * 15.4
+        page.rect((x, baseline - 6, x + 4, baseline - 2), region)
+        page.text(value, x + 10, baseline, 12.5, width=350)
+    where_map(page)
+    page.rect((0, 978, SIZE, SIZE), "ink")
+    page.text("DATE CHECK", 20, 995, 13, "label", "paper", 107)
+    page.text("17 Nov or earlier: Nvidia results; Qeshm strike.",
+              136, 995, 12, color="paper", width=868)
+    page.text("Not yet on Wednesday: trilateral results (talks 19 Nov); Akvan landfall (forecast 20 Nov).",
+              20, 1014, 12, color="paper", width=984)
 
 
 def compose():
     page = Page()
-    page.text("The Global Ledger", 34, 43, 32, "headline")
-    page.text("WORLD NEWS", 809, 40, 24, "label", "grey", 181)
-    page.rect((0, 64, 1024, 275), "ink")
-    page.text("WEDNESDAY", 34, 135, 64, "label", "paper")
-    page.text("18 NOVEMBER 2026", 34, 215, 74, "headline", "paper", 956)
-    page.text("World news of 18 Nov 2026", 36, 258, 30, "body", "paper")
-
-    page.text("GULF / STRAIT OF HORMUZ", 34, 310, 30, "label", "grey")
-    page.text("Iran widens attacks to", 34, 372, 54, "headline", width=750)
-    page.text("Kuwait and Bahrain", 34, 434, 54, "headline", width=750)
-    page.text("Kuwait reports intercepted drones; Bahrain issues two alerts.",
-              34, 488, 30, width=956)
-    tanker(page, 810, 319)
-    page.line([(34, 515), (990, 515)], width=1.5)
-
-    page.line([(512, 538), (512, 981)])
-    page.line([(34, 756), (990, 756)])
-    for i, (category, headline, support, symbol, accent) in enumerate(BRIEFS):
-        x = 34 if i % 2 == 0 else 546
-        label_y = 548 if i < 2 else 790
-        page.text(category, x, label_y, 24, "label", "grey")
-        motif(page, symbol, x, label_y + 29, accent)
-        for row, line in enumerate(headline):
-            page.text(line, x + 108, label_y + 50 + row * 44, 40, "headline", width=336)
-        page.text(support, x, label_y + 182, 30, width=456)
-
-    page.line([(34, 994), (990, 994)])
-    page.text("Sources: AP, Reuters, ANTARA, Khaleej Times, Report.az, UNFCCC",
-              34, 1017, 16, color="grey", width=956)
-    return page.image.resize((SIZE, SIZE), Image.Resampling.LANCZOS)
-
-
-def rgb(hex_color):
-    return tuple(bytes.fromhex(hex_color[1:]))
-
-
-def indexed(image):
-    paper = rgb(COLORS["paper"])
-    palette = [paper]
-    for name in ("ink", "grey", "rule", "amber", "red", "teal"):
-        foreground = rgb(COLORS[name])
-        for step in range(1, 33):
-            palette.append(tuple((back * (32 - step) + front * step + 16) // 32
-                                 for back, front in zip(paper, foreground)))
-    palette.extend([paper] * (256 - len(palette)))
-    reference = Image.new("P", (1, 1))
-    flat = bytes(channel for color in palette for channel in color)
-    reference.putpalette(flat)
-    result = image.quantize(palette=reference, dither=Image.Dither.NONE)
-    return result.tobytes(), flat
+    header(page)
+    lead_panels(page)
+    story_cards(page)
+    briefs(page)
+    page.check_text_collisions()
+    return page
 
 
 def chunk(kind, data):
@@ -178,19 +235,38 @@ def chunk(kind, data):
     return struct.pack(">I", len(data)) + payload + struct.pack(">I", zlib.crc32(payload) & 0xFFFFFFFF)
 
 
-def encode_png(pixels, palette):
+def encode_png(image):
+    palette = [tuple(bytes.fromhex(COLORS["paper"][1:]))]
+    paper = palette[0]
+    for name in tuple(COLORS)[1:] + ("#D5CFC2",):
+        front = tuple(bytes.fromhex(COLORS.get(name, name)[1:]))
+        for step in range(1, 20):
+            palette.append(tuple((back * (19 - step) + fore * step + 9) // 19
+                                 for back, fore in zip(paper, front)))
+    palette.extend([paper] * (256 - len(palette)))
+    reference = Image.new("P", (1, 1))
+    flat = bytes(channel for color in palette for channel in color)
+    reference.putpalette(flat)
+    reduced = image.resize((SIZE, SIZE), Image.Resampling.LANCZOS).quantize(
+        palette=reference, dither=Image.Dither.NONE)
+    pixels = reduced.tobytes()
     rows = b"".join(b"\x00" + pixels[y * SIZE:(y + 1) * SIZE] for y in range(SIZE))
-    header = struct.pack(">IIBBBBB", SIZE, SIZE, 8, 3, 0, 0, 0)
-    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", header) + chunk(b"PLTE", palette)
+    header_bytes = struct.pack(">IIBBBBB", SIZE, SIZE, 8, 3, 0, 0, 0)
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", header_bytes) + chunk(b"PLTE", flat)
             + chunk(b"IDAT", zlib.compress(rows, 9)) + chunk(b"IEND", b""))
 
 
 def main():
-    pixels, palette = indexed(compose())
-    png = encode_png(pixels, palette)
-    if len(png) >= 200_000:
-        raise ValueError("Palette PNG must remain below the 200 KB development target")
+    page = compose()
+    png = encode_png(page.image)
+    if len(png) >= 400_000:
+        raise ValueError("PNG must remain below the 400 KB development target")
     (ROOT / "assets" / "entry.png").write_bytes(png)
+    cap = page.font("headline", 84).getbbox("H")
+    print(json.dumps({"bytes": len(png), "lead_stories": len(LEADS),
+                      "cards": len(CARDS), "briefs": len(ALSO),
+                      "date_cap_height_px": (cap[3] - cap[1]) / SCALE,
+                      "text_boxes_checked": len(page.text_bounds)}))
 
 
 if __name__ == "__main__":

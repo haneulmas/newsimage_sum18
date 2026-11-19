@@ -1,120 +1,49 @@
-# Final revision verification
+# Verification: illustrated news atlas
 
-Edition: Wednesday 18 November 2026. Verified on 19 November 2026.
+Verified locally on 19 November 2026. This is a local engineering and editorial check, not a new contest ranking or reward claim.
 
-## Image and repeatability
+## Output and runtime
 
-| Property | Result |
+| Requirement | Result and evidence |
 | --- | --- |
-| File | `assets/entry.png` |
-| Format | PNG, 8-bit indexed color, non-interlaced |
-| Dimensions | 1024 × 1024 pixels |
-| Size | 86,209 bytes |
-| Target | Below 200,000 bytes and the 1,048,576-byte contest ceiling |
-| SHA-256 | `4c06fc873bf1630782dc5c5a818b16b04b7b59b20883c6a138e6284462ba7e9d` |
-| Palette | Fixed 256 entries, no dithering |
-| Chunks | `IHDR`, `PLTE`, `IDAT`, `IEND` only |
-| Metadata | None |
-| Contest-runtime test | Python 3.13.9, standard library only |
-| Development build | Python 3.10.5, Pillow 11.1.0, FreeType 2.13.3, zlib 1.2.12 |
+| One image at the output contract | PASS: main.py creates the selected directory and writes exactly entry.png; default directory is /output. |
+| Python 3.13 entrypoint | PASS: tested with official portable CPython 3.13.0, using only the standard library. |
+| PNG size and dimensions | PASS: 1024 × 1024 indexed PNG, 114,092 bytes, below 400,000 bytes and the 1 MiB contest limit. |
+| Determinism | PASS: two isolated runs in different initially missing directories equal each other and assets/entry.png byte for byte. |
+| No runtime network | PASS: runtime imports are restricted to os/pathlib/shutil; both isolated runs use an audit hook denying socket, urllib, subprocess and shell activity. Zero forbidden operations. |
+| No metadata | PASS: only IHDR, PLTE, IDAT, IEND; CRCs, zlib stream, scanlines and palette references validated. No text, EXIF, time or color-profile chunks. |
+| Offline renderer | PASS: local Pillow 11.1.0, bundled Inter/Nunito, flat geometry at 2048 × 2048; Lanczos downsampling and fixed palette. No network in renderer or pictograms. |
+| License and repository | PASS: root MIT license, bundled font OFL notices. GitHub API reports public repository created 19 Nov 2026 00:17:51 UTC, after opening 18 Nov 00:00 UTC. |
+| Session window | PASS: this contributing native Codex family began 19 Nov 2026, after the opening. Native logs remain with the host for transcript bundling. |
 
-`python tools/verify.py` passed under Python 3.13.9. It ran `main.py` in two
-fresh isolated processes with site packages disabled (`-I -S -B`). Each run
-used a different temporary output directory containing spaces, nested folders
-that did not yet exist, and a working directory outside the repository.
+SHA-256 of the asset and both runtime outputs:
 
-Both outputs matched each other and `assets/entry.png` byte for byte, with the
-digest above. Each output directory contained only `entry.png`. Neither run
-printed console output or imported Pillow. An audit hook denied socket/network
-and child-command operations; both runs recorded zero forbidden operations.
-The production entrypoint imports only `pathlib` and `os` and copies the asset.
+```text
+94df872e8fc0b1f306ef6477f6065002313201b5d1c13a1c7b6ea752dcccb66b
+```
 
-The PNG validator checked its signature, chunk sequence, lengths and CRCs,
-header fields, palette, complete zlib stream, all scanlines and palette indices,
-IEND and absence of trailing bytes. Independent Pillow verification and full
-pixel decoding passed, with no metadata. A repeated offline development build
-also produced the same bytes. The development library versions above describe
-that build; the contest copier does not depend on any of them.
+## Content and visual review
 
-## Requirements
+| Requirement | Result and evidence |
+| --- | --- |
+| Explicit edition date | PASS: WEDNESDAY and 18 NOVEMBER 2026 use 84 px Inter Bold, measured cap height 61 px. The exact requested one-line date caption is present at 25 px. |
+| Three leads at 300 px | PASS: visually inspected the final PNG at 300 px; Trump/Xi/Putin, widening Gulf attacks and Voyager's light-day headline remain readable in separate color panels. Every lead has a flat pictogram and 44 px headline. |
+| Eight cards at 512 px | PASS: visually inspected all eight headlines and their distinct pictograms at 512 px. Headlines use 22 px and no more than seven words; icons and text occupy separate columns. |
+| Full-size detail | PASS: inspected at 1024 px. Sixteen one-line briefs use 12.5 px, with a schematic dot map, region legend and date-check strip. The builder checks 91 text boxes for column overflow and pairwise text collisions. |
+| Regional structure | PASS: fixed Asia/Middle East/Europe/Americas/Space/Markets/Africa/climate colors are shared by labels, icons and map dots. Palette retains the exact base colors. |
+| Faithful wording | PASS: source ledger has eleven main-story rows and sixteen brief rows. Loan remains proposed; rate hikes are expectations; IPO is pricing with trading scheduled 19 Nov; cyclone landfall remains a forecast. |
+| Reports about earlier events | PASS: Sudan is labelled NEW REPORT with earlier civilian deaths; Russian refineries are cumulative November disruption attributed to sources; ADNOC line explicitly says 17 Nov attack reported on the edition date. |
+| Date exclusions | PASS: Nvidia results and Qeshm strike identified as 17 Nov or earlier. Trilateral results and cyclone landfall are marked future on Wednesday. GTA VI sale launch and the already-announced Ecuador lawsuit omitted. |
+| Original flat art | PASS: eleven code-drawn pictograms, no photos, likenesses, textures, gradients, shadows, glow or invented price plots. IPO symbol is a certificate/price tag; Gulf symbol is a shelter and drone alert. |
+| Clean composition | PASS: no text overflow or detected text collisions; main panels/columns use 12 px gutters and lead-to-card break 16 px. Date, hierarchy and regional coding carry the thumbnail reading. |
 
-1. **Repository and license:** the existing GitHub repository is public and was
-   created at 2026-11-19 00:17:51 UTC, after opening at 2026-11-18 00:00:00 UTC.
-   The root MIT license is preserved. `main.py` is at the root. This local
-   revision must be committed and pushed before a submission can snapshot it.
-2. **One image:** the runtime creates its output directory and writes exactly
-   one complete PNG, within the required dimensions and size. Unset or empty
-   `MAKEFUN_OUTPUT_DIR` selects `/output/entry.png`; the override supports local
-   verification. The default literal was inspected in source.
-3. **Offline and deterministic:** no production network code, clocks, random
-   input, compression or renderer dependency. Two Python 3.13.9 runs pass with
-   network operations denied and identical output bytes.
-4. **Safe architecture:** `tools/build_image.py` renders during development;
-   `main.py` reads the finished asset and writes those exact bytes. Fonts are
-   local and used only by the builder. No packages are installed at runtime.
-5. **Clean tree:** intended root files are `README.md`, `LICENSE`, `main.py`,
-   `assets/` and `tools/`, plus Git's own metadata. Superseded TypeScript,
-   WebAssembly, helper scripts and unused fonts were removed. Verification and
-   visual proof folders were deleted. Existing make.fun attribution is retained.
-6. **Transcript retention:** the native parent session began at
-   2026-11-19 02:40:30.025 UTC, after opening. Its harness-written record is
-   retained outside the public repository. Keep the parent and all contributing
-   subagent logs intact and bundle them after work ends. No reconstructed
-   transcript, transcript upload or contest submission is claimed here.
+Development previews were written outside the repository, inspected, then removed. The verifier removes its own temporary outputs. No temporary render folder or unused font remains in the repository. Existing transcript archives are preserved outside Git through .gitignore.
 
-## Picture-editor review, in priority order
+## Commands
 
-1. **Day:** an unmistakable two-line date band reads “WEDNESDAY” at 64px and
-   “18 NOVEMBER 2026” at 74px, followed by “World news of 18 Nov 2026”.
-2. **Breadth:** exactly five stories: Gulf attacks, APEC in Shenzhen, Wall
-   Street's fifth decline, Russian refining disruption and COP31 in Antalya.
-3. **Reading:** the Gulf lead uses 54px headlines; the four briefs use 40px
-   headlines. Each headline has seven words or fewer, including the climate
-   location. All five headlines and the date were read at 300px width by the
-   primary editor and an independent visual reviewer.
-4. **Faithfulness:** Kuwait's statement stays attributed. The refinery count is
-   marked “Sources” and “in Nov”, rather than 15 same-day strikes. COP31 says
-   “draft due”, not “adopted”. Brent uses the minus sign. The ship provides
-   maritime context without a fire or an assertion of a Wednesday vessel
-   attack. The falling market motif has no invented price scale or data series.
-5. **Craft:** flat custom motifs, a larger lead, four aligned briefs, hairline
-   dividers and a controlled palette. Full-size and 300px inspections found no
-   clipping, overlap, smears, malformed glyphs or spelling errors. No gradients,
-   glows, shadows, noise, photos, faces, decorative flags or generated text.
+```sh
+python -B tools/build_image.py
+python3.13 -I -S -B tools/verify.py
+```
 
-Supporting lines are 30px and small at thumbnail size; the source footer is
-16px and intended for full-size inspection. No essential headline or qualifier
-is placed in the footer. Unicode U+2212 supplies the minus sign; U+2013 supplies
-ranges and regional labels. Place names were checked against the supplied copy.
-
-## Antislop follow-up
-
-Mode remains AFTER, selected earlier in the conversation. The user explicitly
-authorized this revision and its new assets. Design read: a dated world-news
-front page for quick visual scanning, with financial-broadsheet typography.
-ENERGY 2 / RHYTHM 3 / MOTION 1: emphatic date and lead, varied editorial scale,
-static output. The user's brief supplies the direction; no reference layout or
-template was copied.
-
-- **Hard gate:** PASS in static-image scope. Direct supplied copy, sourced
-  figures, explicit date, approved assets, sufficient headline size, functioning
-  runtime and actual image inspection. The fictional masthead is disclosed in
-  README. Navigation, controls, keyboard focus, UI states and theme switching
-  are not features of this PNG. README's preview has alt text and dimensions.
-- **Purpose gate:** PASS. The navy band identifies the edition; the serif/sans
-  pairing separates headlines from labels; hairlines separate stories. The
-  tanker, skyline, falling line, refinery and globe each identify their story.
-  They are custom flat drawings, not stock icon decorations. No pills, floating
-  cards, glass, shadow, glow, texture or animation are used. Existing README
-  badges serve the contest's attribution requirements.
-- **Liveliness:** PASS. The 54px lead contrasts with the 40px brief grid; the
-  enlarged date is the first focal point. Structural gaps protect the reading
-  order. Muted red denotes risk/decline, teal climate/maritime context and amber
-  the summit motif. The bold serif voice and rule system unify the page.
-- **Craftsmanship:** PASS. Every block carries one supplied story, every motif
-  has a subject-specific purpose, and no section exists to fill a template.
-  The page contains no generic marketing copy, fabricated statistics or visual
-  hype. Runtime, encoding, source dates and thumbnail readability were checked.
-
-No judge score or winning probability has been estimated. The retained logs
-still need to be packaged with the eventual committed revision for submission.
+The renderer was regenerated twice and the SHA-256 compared; the runtime verifier was executed using the official portable Python 3.13 interpreter. A current transcript archive must include this illustration revision before submission; the earlier 23-session bundle alone does not.

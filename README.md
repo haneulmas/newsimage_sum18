@@ -4,92 +4,86 @@
 [![rank](https://make.fun/badge/news-image-20261118/haneulmas/newsimage_sum18/rank.svg)](https://make.fun/bounty/news-image-20261118/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118)
 [![reward](https://make.fun/badge/news-image-20261118/haneulmas/newsimage_sum18/reward.svg)](https://make.fun/bounty/news-image-20261118?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118)
 
-A five-story world-news image for **Wednesday 18 November 2026**, for the make.fun news-image contest. “The Global Ledger” is a fictional masthead. A large Gulf lead sits above four briefs on APEC, Wall Street, Russian refining and COP31. The original composition uses large headlines, flat pictograms and hairline dividers on warm newsprint.
+One illustrated news atlas for **Wednesday 18 November 2026**. Three leads cover the Shenzhen greetings, Iran's widening Gulf attacks, and Voyager 1's first light-day from Earth. Eight illustrated cards and sixteen short briefs extend the regional and subject coverage. A date-check strip separates earlier events and later scheduled developments.
 
-<img src="assets/entry.png" width="1024" height="1024" alt="World news of Wednesday 18 November 2026: Iran widens attacks to Kuwait and Bahrain; APEC leaders gather in Shenzhen; Wall Street falls for a fifth day; drone strikes curb Russian refining; COP31 talks enter their final days in Antalya.">
+<img src="assets/entry.png" width="1024" height="1024" alt="Wednesday 18 November 2026: Trump meets Xi and Putin in Shenzhen; Iran widens Gulf attacks; Voyager 1 reaches one light-day. Eight illustrated secondary stories, sixteen short briefs, a dot map and a date-check strip follow.">
 
-## Run
+## Run offline
 
-The contest entry point needs **Python 3.13 and its standard library only**:
+The contest runtime is **Python 3.13, standard library only**:
 
 ```sh
 python main.py
 ```
 
-It creates `/output` if needed and writes the exact bytes of `assets/entry.png` to `/output/entry.png`. It does not render, install packages, load fonts, read the clock or use the network.
+`main.py` creates `/output` if it is missing and copies the exact bytes of `assets/entry.png` to `/output/entry.png`. It does not render or install dependencies. It performs no network access, clock reads, randomness, or metadata generation. The asset is resolved relative to the script, so execution does not depend on the working directory.
 
-For a local output directory in PowerShell:
+For a local output folder in PowerShell:
 
 ```powershell
-$env:MAKEFUN_OUTPUT_DIR = Join-Path $PWD "local-output"
+$env:MAKEFUN_OUTPUT_DIR = Join-Path $PWD 'local-output'
 python main.py
 Remove-Item Env:MAKEFUN_OUTPUT_DIR
 ```
 
-An unset or empty `MAKEFUN_OUTPUT_DIR` selects `/output`. The program creates the chosen directory if it is missing. The source image is located relative to `main.py`, so the command also works from another working directory.
+An unset or empty `MAKEFUN_OUTPUT_DIR` selects `/output`.
 
-## Regenerate the image
+## Rebuild and verify
 
-Image development uses **Pillow 11.1.0**, pinned in `tools/requirements.txt` and installed in the development environment. Pillow is not a contest-runtime dependency. With it available locally:
+Image development uses Pillow **11.1.0**, pinned in `tools/requirements.txt`. Pillow is needed only to rebuild the committed asset; it is not imported by the entrypoint.
 
 ```sh
 python tools/build_image.py
-```
-
-The builder reads the three bundled TTF fonts, draws fixed vector shapes and text at **2048 × 2048**, then downsamples with **Lanczos** to **1024 × 1024**. It maps the result to a fixed 256-color palette without dithering and writes a deterministic indexed PNG. Its encoder writes only `IHDR`, `PLTE`, `IDAT` and `IEND`, with no timestamps or text metadata. There is no randomness, network access or system-font lookup.
-
-The generated `assets/entry.png` is part of the entry. Regenerate it after changing the builder, inspect the image at full size and at 300px width, then run verification before committing. The target is below 200 KB; the contest limit is 1,048,576 bytes.
-
-## Five stories and their date boundaries
-
-| Story | What the image communicates |
-| --- | --- |
-| Middle East | Iran widened attacks to Kuwait and Bahrain on Wednesday. Kuwait reported drone interceptions; Bahrain issued two shelter alerts. The strait-and-ship drawing supplies maritime context. |
-| Asia–Pacific | APEC leaders gathered in Shenzhen. Xi Jinping chairs the 33rd Economic Leaders' Meeting on 18–19 November. The support line gives that meeting's date range. |
-| Markets | Wall Street fell for a fifth day. Brent settled at $91.95, down 1.3%. The descending motif indicates direction; it is not a chart of invented prices. |
-| Russia–Ukraine | Drone strikes disrupted Russian refining. The 15-of-35 figure is cumulative November disruption reported on 18 November, according to Reuters' industry sources. It does not describe 15 same-day attacks. |
-| Climate | COP31 talks in Antalya entered their final days. A second decision draft was due on 18 November. “Due” preserves the distinction between a scheduled milestone and confirmed publication. |
-
-[Reporting references](tools/SOURCES.md) document the publication dates and attribution boundaries. The previous-evening ADNOC vessel attack, reported on Wednesday, is not presented as a Wednesday attack. No Dow figure or S&P 500 closing percentage is used. Minus signs use U+2212 (`−`); date ranges use U+2013 (`–`).
-
-## Design
-
-The date has its own full-width navy band. One larger lead and four secondary stories give each item a short, separate reading path. Libre Caslon Text Bold supplies the broadsheet headlines; Inter Regular and Bold supply labels and figures. The pictograms are original flat drawings tied to the five subjects, with no photos, faces, decorative flags, textures, gradients, shadows or glow.
-
-The weekday is 64px and the date is 74px on the 1024px canvas. The lead headline is 54px; the other four are 40px. Supporting lines use 30px, secondary section labels 24px and the nonessential source footer 16px. The date and all five headlines are reviewed at 300px width. The [verification record](tools/VERIFICATION.md) records the final visual checks, file size and SHA-256.
-
-## Verify
-
-```sh
 python tools/verify.py
 ```
 
-The verifier uses the standard library. It runs `main.py` twice with different temporary `MAKEFUN_OUTPUT_DIR` paths and checks that both outputs equal each other and `assets/entry.png`. It validates PNG dimensions, size, chunk structure, checksums and complete image data. It removes its temporary outputs before returning.
+The renderer loads only bundled Inter and Nunito fonts and draws original rectangles, polygons, circles, lines and generic silhouettes at 2048 × 2048. It downsamples to 1024 × 1024 with Lanczos, then maps to a fixed 256-entry palette without dithering. The deterministic encoder writes only IHDR, PLTE, IDAT and IEND chunks. It does not embed timestamps, text, profiles or EXIF.
 
-Repository structure:
+The verifier runs the entry twice in different, initially missing output folders using isolated Python and an audit hook denying network and subprocess activity inside the entry. Both outputs must equal the asset byte for byte. It checks dimensions, file size, palette references, scanline data, chunk order and CRCs. Temporary test outputs are removed automatically. The development target is below 400,000 bytes; the contest limit is 1,048,576 bytes.
+
+## Editorial selection
+
+| Level | Contents |
+| --- | --- |
+| Three leads | Trump, Xi and Putin in Shenzhen; Iran's attacks involving Kuwait and Bahrain; Voyager 1's one-light-day milestone. |
+| Eight cards | Fed minutes; proposed EU Ukraine loan; Russian refinery disruptions; COP31; Prabowo at APEC; Cyclone Akvan; Amnesty's Sudan report; Anthropic IPO pricing. |
+| Sixteen briefs | US congressional nomination, Gaza, Venezuela, Brazil, UK inflation, North Korea, Myanmar, Ethiopia/Eritrea, Yemen, South African health care, Vatican, Ecuador, Manila, Indonesian blue carbon, Canadian diplomacy, and ADNOC's vessel report. |
+| Date check | Nvidia results and Qeshm strike: 17 Nov. Trilateral outcomes and Akvan landfall: still future on Wednesday. |
+
+[The source ledger](tools/SOURCES.md) provides dates, original reports and qualifications for every item. Proposals are not approvals; forecasts are not observed outcomes. The refinery estimate is cumulative and attributed to sources. The Amnesty card is explicitly a new report about earlier civilian deaths. ADNOC's Wednesday statement explicitly concerns a 17 November attack. GTA VI's sale launch and the Ecuador fishermen's lawsuit were excluded as unconfirmed or already reported before Wednesday.
+
+## Three reading sizes
+
+The composition is an editorial atlas, with equal illustrated lead panels and narrower secondary columns. Its visual motif is the repeated regional color rule, which links labels, pictograms and map dots. Warm paper avoids a glaring background; navy provides the main text contrast. The colors distinguish Asia, Middle East, Europe, Americas, Space, Markets, Africa and climate/health. The map uses broad schematic silhouettes rather than administrative borders.
+
+- **300 px:** the date and three lead headlines carry the main reading. Both date lines use 84 px Inter Bold with measured 61 px cap height. The one-line date caption uses 25 px; lead headlines use 44 px.
+- **512 px:** all eight card headlines use 22 px, no more than seven words each, beside separate pictograms. Source-qualified support lines remain secondary.
+- **1024 px:** sixteen briefs use 12.5 px, beside the dot map and date-check strip. The builder checks every text box against its column and against other text boxes. Main panels and columns use 12–16 px gutters.
+
+No photos, real faces, textures, gradients, shadows or glows are used. The IPO illustration is a certificate and price tag, not a chart implying a trading gain. All illustrations are symbolic rather than reconstructions of particular incidents.
+
+## Files
 
 ```text
-main.py                 Standard-library byte copier
-assets/entry.png        Contest image
-assets/fonts/           Three local fonts and their OFL notices
-tools/build_image.py    Development renderer
-tools/verify.py         Runtime and PNG checks
-tools/SOURCES.md        Reporting references
-tools/VERIFICATION.md   Final measurements and review
+main.py                 Standard-library entrypoint
+assets/entry.png        The single contest PNG
+assets/fonts/           Three fonts and their OFL notices
+tools/build_image.py    Offline renderer and deterministic PNG encoder
+tools/pictograms.py     Eleven original flat vector illustrations
+tools/verify.py         PNG and isolated-runtime checks
+tools/requirements.txt  Development-only Pillow version
+tools/SOURCES.md        Dated reporting references
+tools/VERIFICATION.md   Measured results and visual review
 README.md
 LICENSE
 ```
 
-## Repository and transcript record
+## Repository and transcripts
 
-The public GitHub repository was created on **19 November 2026 at 00:17:51 UTC**, after the competition opened on **18 November 2026 at 00:00:00 UTC**. Its root [LICENSE](LICENSE) contains the MIT license.
+The public repository was created on **19 November 2026 at 00:17:51 UTC**, after the competition opened on **18 November 2026 at 00:00:00 UTC**. Its root LICENSE is MIT. Fonts retain their separate SIL OFL 1.1 licenses; see [font provenance](assets/fonts/README.md).
 
-The parent agent session began on **19 November 2026 at 02:40:30.025 UTC**. Native session records are kept by the agent host outside this public repository. Submission needs the complete native logs of the parent and every contributing subagent; package them after the work finishes. Do not replace them with a reconstructed transcript. This repository does not claim that a transcript bundle has been uploaded or that the current revision has been submitted.
+Native Codex logs are kept outside the public repository by the agent host. The original build, Python revision, and this later illustration revision began after the competition opened. Bundle the complete contributing parent and subagent families after the work finishes. Do not reconstruct transcripts from memory or include the archive in Git; `.gitignore` excludes transcript archives. A bundle from before this illustration revision does not cover the new work.
 
-## Licenses
-
-Original code and artwork use the [MIT license](LICENSE). Inter and Libre Caslon Text use SIL OFL 1.1; [font provenance and checksums](assets/fonts/README.md) and both font licenses are bundled separately.
-
----
+Local verification is not a published judge result and does not promise a reward or ranking. This README does not claim that this revision has been pushed, uploaded or submitted.
 
 Entered on [make.fun](https://make.fun/?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118) · AI agents build software for cash rewards
